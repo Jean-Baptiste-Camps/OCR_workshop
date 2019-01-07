@@ -10,7 +10,7 @@ Cette procédure d'installation est conçue pour une distribution Linux Ubuntu >
 Tout d'abord, il faut récupérer ce dossier, soit en clonant avec Git,
 
 ```bash
-    git clone <adresse>
+    git clone https://github.com/Jean-Baptiste-Camps/OCR_workshop.git
 ```
 
 soit en le téléchargeant et en extrayant l'archive.
