@@ -1,0 +1,9 @@
+*.synctex.gz
+*.toc
+*.snm
+*.out
+*.nav
+*.log
+*.aux
+*.vrb
+_minted-diapos
