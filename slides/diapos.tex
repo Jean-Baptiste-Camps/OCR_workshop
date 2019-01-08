@@ -35,25 +35,10 @@
 %	\tableofcontents[currentsection]%
 %\end{frame} }
 
-\AtBeginSubsection[]{% 
+\AtBeginSection[]{% 
 \begin{frame}{Plan}%
 \small
-\tableofcontents[currentsection,currentsubsection]%
-\end{frame} }
-
-
-\makeatother 
-
-%\AtBeginSection[]{% 
-%	\begin{frame}{Plan}%
-%	\small
-%	\tableofcontents[currentsection]%
-%\end{frame} }
-
-\AtBeginSubsection[]{% 
-\begin{frame}{Plan}%
-\small
-\tableofcontents[currentsection,currentsubsection]%
+\tableofcontents[currentsection]%
 \end{frame} }
 
 
@@ -93,9 +78,10 @@
 		\textit{Handwritten text recognition} (\textsc{htr})
 		\begin{itemize}
 		    \item très peu fonctionnel jusqu'à ces dernières années;
-		    \item nouveaux développements: IA (réseaux de neurone récurrents LSTM…);
-		    \item outils libres: \texttt{OCRopy}, …
-		    \item modèles spécifiques à entraîner (pour chaque main, écriture,…).
+		    \item nouveaux développements: IA (réseaux de neurones récurrents LSTM…);
+		    \item outils libres: \texttt{Kraken}, …
+		    \item modèles spécifiques à entraîner (pour chaque main, écriture,…);
+		    \item on progresse petit à petit sur la généralité des modèles.
 		\end{itemize}
 	\end{column}
 \end{columns}
@@ -131,6 +117,7 @@
 
 \section{Traitement des images}
 
+
 \begin{frame}{}
     \begin{columns}
 	\begin{column}{0.45\textwidth}
@@ -140,7 +127,7 @@
 	\begin{column}{0.45\textwidth}
 		Besoins:
 		\begin{enumerate}
-		    \item images en 300 DPI;
+		    \item images en 300 DPI minimum;
 		    \item redressées, débruitées;
 		    \item binarisées.
 		\end{enumerate}
@@ -154,14 +141,14 @@
     
     \begin{enumerate}
         \item Démarrer un nouveau projet;
-        \item charger les images du dossier \texttt{digby\_23};
+        \item charger les images du dossier \texttt{src} (Mer des Histoires ou Cid à défaut);
         \item suivre les différentes étapes dans le logiciel;
-        \item exporter en tiff binarisé 300 DPI.
+        \item exporter en tiff binarisé 600 DPI.
     \end{enumerate}
     
 \end{frame}
 
-\subsection{Analyse de la mise en page}
+\section{Analyse de la mise en page}
 
 \begin{frame}{Analyser la mise en page}
     \begin{columns}
@@ -183,6 +170,7 @@
 		    \begin{itemize}
 		        \item \texttt{OCRopy} 1;
 		        \item \textsc{Oriflamms} (\textsc{IRHT});
+		        \item \texttt{Kraken};
 		    \end{itemize}
 		    \item fondée sur des méthodes d'apprentissage (IA), par ex.
 		    \begin{itemize}
@@ -225,17 +213,16 @@ $ kraken list
 \frametitle{Analyser la mise en page avec \texttt{Kraken}: étape par étape}
     Depuis la racine du dossier:
 \begin{block}{\alert{Si les images n'ont pas été prétraitées}}
-
-\end{block}
 \begin{minted}{bash}
-#Binariser les images (si pas déjà fait
-#  avec ScanTailor)
-$ kraken -I "src_digby23/*" -o .png binarize
+#Binariser les images (si pas déjà fait avec ScanTailor)
+$ kraken -I "src/*" -o .png binarize
 # Segmentation en lignes
-$ kraken -I "src_digby23/*.png" -o .json segment
+$ kraken -I "src/*.png" -o .json segment
 # OU les deux d'un coup
-kraken -I "src_digby23/*" -o .json binarize segment
+kraken -I "src/*" -o .json binarize segment
 \end{minted}
+\end{block}
+
 
 \begin{block}{\alert{Si elles l'ont été}}
 \begin{minted}{bash}
@@ -250,12 +237,12 @@ $ kraken -I "tif/*" -o .json segment
 \begin{frame}[fragile]
 \frametitle{Tout-en-un}
 
-Pour binariser, segmenter et générer un fichier de transcription
-
+\begin{block}{Pour binariser, segmenter et générer un fichier de transcription}
 \begin{minted}{bash}
 # Pour générer un fichier de transcription
 $ ketos transcribe -o gt.html tif/*
 \end{minted}
+\end{block}
     
 \end{frame}
 
@@ -269,14 +256,14 @@ $ ketos transcribe -o gt.html tif/*
 		
 		\begin{itemize}
 			\item approches segmentées ou non segmentées;
-			\item mesures de distance; méthodes statistiques (chaînes de Markov) ou d'intelligence artificielle (réseaux de neurones convolutifs ou récurrents, LSTM 1D, LSTM 2D, etc.);
+			\item mesures de distance; méthodes statistiques ou d'intelligence artificielle (réseaux de neurones convolutifs ou récurrents, LSTM 1D, LSTM 2D, etc.);
 			\item outils directement opérationnels ou nécessitant un entraînement.
 		\end{itemize}
 		
 	%	\pause
 		
 		\begin{block}{Ocropy, CLSTM et Kraken}
-			\href{https://github.com/tmbdev/ocropy}{\texttt{OCRopy}} et \href{http://github.com/tmbdev/clstm}{CLSTM} développés par Thomas M. Breuel; \href{https://github.com/mittagessen/kraken}{\texttt{Kraken}}, \textit{fork} d'\texttt{OCRopy} développé par Ben Kiessling (PSL).
+			\href{https://github.com/tmbdev/ocropy}{\texttt{OCRopy}} et \href{http://github.com/tmbdev/clstm}{CLSTM} développés par Thomas M. Breuel; \href{https://github.com/mittagessen/kraken}{\texttt{Kraken}}, \textit{fork} d'\texttt{OCRopy} développé par Ben Kiessling (PSL), \texttt{Calamari} (\textit{fork} de Kraken)…
 			\begin{itemize}
 				\item approche non segmentées;
 				\item réseaux de neurones récurrents (LSTM);
@@ -298,13 +285,13 @@ $ ketos transcribe -o gt.html tif/*
 	{Prétraitement des images};%
 	\node[draw, rectangle, rounded corners=3pt] (A) at (-3,5)
 	{Analyse mise en page};%
-	\node[draw, rectangle, rounded corners=3pt] (GT) at (0,2)
+	\node[draw, rectangle, rounded corners=3pt] (GT) at (0,2.7)
 	{Vérité de terrain};
-	\node[draw, rectangle, rounded corners=3pt] (T) at (4,2)
+	\node[draw, rectangle, rounded corners=3pt] (T) at (4,2.7)
 	{Entraînement};
-	\node[draw, rectangle, rounded corners=3pt] (TT) at (2,-0.5)
+	\node[draw, rectangle, rounded corners=3pt] (TT) at (2,0.5)
 	{Test};
-	\node[draw, rectangle, rounded corners=3pt] (O) at (2,-1.5)
+	\node[draw, rectangle, rounded corners=3pt] (O) at (2,-0.5)
 	{Sortie};
 	
 	\draw[->,>=latex] (P) -- (A) ;
@@ -329,19 +316,21 @@ $ ketos transcribe -o gt.html tif/*
 			\begin{block}{Résultats}
 				\begin{itemize}
 					\item pour un imprimé ancien, des taux d'erreur de l'ordre de 1\% sont atteignables…
-					\item pour un ms., des taux inférieurs à 10\% sont atteignables;
+					\item pour un ms., des taux inférieurs à 10\% sont atteignables rapidement, $>$5\% plus difficiles;
 					\item cas du Digby 23, env. 400 lignes d'entraînement,
-					taux de succès de 89,16\% en test, et 93\% sur l'ensemble des données.
+					taux de succès de 89,16\% en test, et 93\% sur l'ensemble des données;
 				\end{itemize}
 			\end{block}
+			\begin{block}{Pour un modèle un peu plus général}
+				\href{https://github.com/Jean-Baptiste-Camps/FROC-MSS}{https://github.com/Jean-Baptiste-Camps/FROC-MSS}
+				\begin{itemize}
+					\item 4 manuscrits différents du XII\ieme{}-XIII\ieme{};
+					\item 3000 lignes env.
+					\item CER de 8\% en test (7\% en ignorant l'espacement).
+				\end{itemize}
+			\end{block}
+			
 		}
-	
-	
-	\only<4>{
-	
-	
-	
-}
 	
 		
 	\end{frame}
@@ -350,30 +339,31 @@ $ ketos transcribe -o gt.html tif/*
 \frametitle{Évaluation et confusions fréquentes}
 
 \begin{minted}{bash}
-Evaluating model_best.mlmodel
-Evaluating  100\%          
+Evaluating model_froc.mlmodel
+Evaluating 100 %
 === report  ===
-21270 Characters
-1473 Errors
-93.07\% Accuracy
 
-1152 Insertions
-93 Deletions
-228 Substitutions
+13645   Characters
+1107    Errors
+91.89 %  Accuracy
 
-Errors Correct-Generated
-557 { 0xa } - {  }
-85 { SPACE } - {  }
-41 { ı } - {  }
-38 {  } - { SPACE }
-30 { n } - {  }
+585     Insertions
+156     Deletions
+366     Substitutions
+
+Errors  Correct-Generated
+91      { SPACE } - {  }
+67      { ı } - {  }
+56      {  } - { SPACE }
+36      { COMBINING ACUTE ACCENT } - {  }
+32      { n } - {  }
 \end{minted}
     
 \end{frame}
 	
 %# N.B.: les commandes peuvent se combiner. 
 %# Tout-en-un avec le modèle par défaut
-%$ kraken -i src_digby23/50rb.jpg texte.txt binarize segment ocr
+%$ kraken -i src/50rb.jpg texte.txt binarize segment ocr
 
 \subsection{Préparation des données}
 
@@ -408,15 +398,56 @@ Pas terrible… Mais comment améliorer le modèle?
 $ ketos extract --output book --normalization NFD gt.html
 \end{minted}
 
-Ensuite 90\% des lignes corrigées vont servir à l'entraînement et 10\% au test des modèles.
+Ensuite idéalement, 80\% des données vont servir à entraîner, 10\% à évaluer les modèles pendant l'entraînement, 10\% à tester le modèle retenu (on peut faire 90\% - 10\% si la précision de l'évaluation n'est pas critique).
 
 \begin{itemize}
     \item \alert{il est recommandé de faire cette répartition de manière aléatoire};
     \item \alert{il est possible d'accroître artificiellement le nombre de lignes d'entraînement, en bruitant de différentes manières les lignes de GT.}
 \end{itemize}
-Par défaut, Kraken réalisera certaines de ces opérations pour vous
-%TODO: vérifier
-(contrairement à OCRopy), mais il est aussi possible d'utiliser un logiciel comme \href{http://doc-creator.labri.fr}{Doccreator}, par exemple.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Création des jeux \texttt{train}, \texttt{val} et \texttt{test}}
+	
+\begin{block}{Sélection des pages à transcrire}
+	Lorsque vous préparez des données d'entraînement, il peut être préférable de ne pas transcrire des pages immédiatement contiguës, mais de les sélectionner aléatoirement dans l'ensemble du document.
+
+	$\rightarrow$ éviter des biais dus à des changements de fonte, mise en page, etc.
+\end{block}	
+
+\begin{block}{Répartition en \texttt{train} / \texttt{val} / \texttt{test}}
+	Pour des raisons similaires, et \alert{surtout pour des documents anciens} ou irréguliers, il vaut mieux
+	sélectionner aléatoirement des lignes de chaque page pour les séparer en \texttt{train} / \texttt{val} / \texttt{test}.
+	
+\end{block}	
+
+On peut créer un script Python ou autre pour ce faire:
+\begin{minted}{bash}
+$ python3 ../randomise_data.py book/*.png
+\end{minted}
+	
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Apparté: augmentation artificielle des données d'entraînement}
+
+\textbf{Constat}: \alert{transcrire coûte cher} (temps, effort, …). 
+
+Pour obtenir augmenter les données d'entraînement avec moins d'effort, on peut:
+
+\begin{itemize}
+	\item générer des lignes arbitraires de textes, si l'on dispose de la fonte (commande \texttt{ketos linegen} dans Kraken);
+	\item appliquer diverses déformations et bruiter les lignes (pseudo-tâches, trous, bavures, courbures, etc.)
+\end{itemize}
+
+Un bon outil: \texttt{Doccreator}, \href{http://doc-creator.labri.fr}{http://doc-creator.labri.fr}, qui permet de:
+\begin{itemize}
+	\item extraire une pseudo-fonte à partir de documents;
+	\item multiplier les lignes par autant de déformations 2D ou 3D que l'on souhaite.
+\end{itemize}
+
+Permet en général des gains modestes (1 ou 2\% de CER), mais appréciables.
 
 \end{frame}
 
@@ -426,7 +457,7 @@ Par défaut, Kraken réalisera certaines de ces opérations pour vous
 On peut ensuite lancer un entraînement (de zéro ou à partir du modèle précédent, aux choix). 
 \begin{minted}{bash}
 #Lancer l'entraînement
-$ ketos train book/*.png
+$ ketos train -t train.txt -e val.txt
 \end{minted}
 
 N.B: de nombreux autres paramètres sont disponibles, liés au modèle et à l'entraînement.
@@ -444,11 +475,12 @@ Si les données n'ont pas été normalisées auparavant, on peut utiliser l'opti
 
 \textbf{4. Tester les résultats}
 
-Une fois que l'entraînement a atteint un niveau satisfaisant, on peut tester la qualité du résultat, 
+Une fois que l'entraînement a atteint un niveau satisfaisant, ou quand les paramètres de l'\textit{early stopping} ont mené à l'interrompre (l'erreur a cessé de décroître suffisamment pendant un nombre donné d'époques)
+on peut tester la qualité du résultat, 
 
 \begin{minted}{bash}
 # Test du meilleur modèle et confusions de caractères
-$ ketos test -m model_best.mlmodel book2/*/*.png
+$ ketos test -m model_best.mlmodel -e test.txt
 \end{minted}
 
 %# Test des erreurs de différents modèles, comparativement
@@ -458,6 +490,23 @@ $ ketos test -m model_best.mlmodel book2/*/*.png
 %done
 
 \end{frame}
+
+\section{Et après?}
+
+\begin{frame}{Post-correction}
+	Une fois que l'on a un modèle aux résultats satisfaisants, on peut l'appliquer à l'ensemble du document. Mais, quel que soit sa précision, il risque de rester tout de même des erreurs.
+	
+	Il est délicat d'échapper à une relecture de l'ensemble, dans la plupart des cas, mais certains outils permettent d'accélérer ce processus:
+	
+	\begin{itemize}
+		\item outils type `correcteurs orthographiques' pour les langues modernes / standardisées;
+		\item modèles linguistiques un peu plus complexes pour les états anciens de langue.
+	\end{itemize}
+	
+Un exemple: \texttt{PoCoTo} (\href{https://github.com/cisocrgroup/PoCoTo}{https://github.com/cisocrgroup/PoCoTo}).
+	
+\end{frame}
+
 
 
 \end{document}
