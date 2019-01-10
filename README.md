@@ -27,7 +27,7 @@ Tout d'abord, il vous faut une installation de Python >= à 3.6, et installer le
 suivants:
 
 ```bash
-    sudo apt-get install python3.6 python3.6-dev pip3 virtualenv
+    sudo apt-get install python3.6 python3.6-dev python3-pip virtualenv
 ```
 
 Une fois cela fait, il est possible de passer à l'installation de Kraken, ce
